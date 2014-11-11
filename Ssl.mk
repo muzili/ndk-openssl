@@ -16,6 +16,17 @@ LOCAL_MODULE := libssl_static
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/android-config.mk $(LOCAL_PATH)/Ssl.mk
 include $(LOCAL_PATH)/Ssl-config-target.mk
 include $(LOCAL_PATH)/android-config.mk
+
+LOCAL_C_INCLUDES:= $(LOCAL_C_INCLUDES:external/openssl/%=$(LOCAL_PATH)/%)
+LOCAL_SRC_FILES := $(LOCAL_SRC_FILES_$(TARGET_ARCH))
+LOCAL_CFLAGS 	+= $(LOCAL_CFLAGS_$(TARGET_ARCH))
+
+LOCAL_SRC_FILES_$(TARGET_ARCH) :=
+LOCAL_SRC_FILES_x86_64 :=
+LOCAL_SRC_FILES_arm :=
+LOCAL_SRC_FILES_x86 :=
+LOCAL_SRC_FILES_mips :=
+
 include $(BUILD_STATIC_LIBRARY)
 
 #######################################
@@ -39,37 +50,15 @@ LOCAL_MODULE := libssl
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/android-config.mk $(LOCAL_PATH)/Ssl.mk
 include $(LOCAL_PATH)/Ssl-config-target.mk
 include $(LOCAL_PATH)/android-config.mk
+
+LOCAL_C_INCLUDES:= $(LOCAL_C_INCLUDES:external/openssl/%=$(LOCAL_PATH)/%)
+LOCAL_SRC_FILES := $(LOCAL_SRC_FILES_$(TARGET_ARCH))
+LOCAL_CFLAGS 	+= $(LOCAL_CFLAGS_$(TARGET_ARCH))
+
+LOCAL_SRC_FILES_$(TARGET_ARCH) :=
+LOCAL_SRC_FILES_x86_64 :=
+LOCAL_SRC_FILES_arm :=
+LOCAL_SRC_FILES_x86 :=
+LOCAL_SRC_FILES_mips :=
+
 include $(BUILD_SHARED_LIBRARY)
-
-#######################################
-# host shared library
-include $(CLEAR_VARS)
-LOCAL_SHARED_LIBRARIES := $(log_shared_libraries)
-LOCAL_C_INCLUDES := $(log_c_includes)
-
-LOCAL_SHARED_LIBRARIES += libcrypto-host
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE := libssl-host
-LOCAL_MULTILIB := both
-LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/android-config.mk $(LOCAL_PATH)/Ssl.mk
-include $(LOCAL_PATH)/Ssl-config-host.mk
-include $(LOCAL_PATH)/android-config.mk
-include $(BUILD_HOST_SHARED_LIBRARY)
-
-#######################################
-# ssltest
-include $(CLEAR_VARS)
-LOCAL_SHARED_LIBRARIES := $(log_shared_libraries)
-LOCAL_C_INCLUDES := $(log_c_includes)
-
-LOCAL_SRC_FILES := ssl/ssltest.c
-LOCAL_SHARED_LIBRARIES := libssl libcrypto
-LOCAL_MODULE := ssltest
-LOCAL_MULTILIB := both
-LOCAL_MODULE_STEM_32 := ssltest
-LOCAL_MODULE_STEM_64 := ssltest64
-LOCAL_MODULE_TAGS := optional
-LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/android-config.mk $(LOCAL_PATH)/Ssl.mk
-include $(LOCAL_PATH)/Ssl-config-host.mk
-include $(LOCAL_PATH)/android-config.mk
-include $(BUILD_EXECUTABLE)
